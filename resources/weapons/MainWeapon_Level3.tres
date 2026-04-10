@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MainWeaponData" load_steps=2 format=3 uid="uid://d1o9w8ynixmpl"]
+
+[ext_resource type="Script" path="res://scripts/weapons/MainWeaponData.gd" id="1_zxc56"]
+
+[resource]
+script = ExtResource("1_zxc56")
+level = 3
+bullet_speed = 450.0
+bullet_damage = 2
+fire_cooldown = 0.4
+can_destroy_steel = true
+bullet_color = 1 0 0 1

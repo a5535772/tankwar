@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://4kp7vlu2ope3"]
+
+[ext_resource type="Script" path="res://scripts/entities/tanks/Player1Tank.gd" id="1_player1"]
+[ext_resource type="SpriteFrames" uid="uid://be6pdyvmnoak5" path="res://assets/images/tanks/sprite_frames/tank_body_frames.tres" id="2_body"]
+[ext_resource type="SpriteFrames" uid="uid://qyjvinsvclol" path="res://assets/images/tanks/sprite_frames/track_frames.tres" id="3_track"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(28, 28)
+
+[node name="Player1Tank" type="CharacterBody2D"]
+collision_mask = 49
+script = ExtResource("1_player1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="TrackLeft" type="AnimatedSprite2D" parent="."]
+position = Vector2(-12, 0)
+sprite_frames = ExtResource("3_track")
+animation = &"move"
+
+[node name="TrackRight" type="AnimatedSprite2D" parent="."]
+position = Vector2(12, 0)
+sprite_frames = ExtResource("3_track")
+animation = &"move"
+
+[node name="TankBody" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_body")
+animation = &"move"

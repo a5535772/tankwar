@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MainWeaponData" load_steps=2 format=3 uid="uid://bm8yv8xnhxmpk"]
+
+[ext_resource type="Script" path="res://scripts/weapons/MainWeaponData.gd" id="1_qwe12"]
+
+[resource]
+script = ExtResource("1_qwe12")
+level = 1
+bullet_speed = 400.0
+bullet_damage = 1
+fire_cooldown = 0.5
+can_destroy_steel = false
+bullet_color = 1 1 0 1

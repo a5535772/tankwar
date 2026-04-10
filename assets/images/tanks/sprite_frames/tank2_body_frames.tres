@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://tank2_body_frames"]
+
+[ext_resource type="Texture2D" path="res://assets/images/tanks/tank2/tank2-export1.png" id="1_tank2"]
+[ext_resource type="Texture2D" path="res://assets/images/tanks/tank2/tank2-export2.png" id="2_tank2"]
+[ext_resource type="Texture2D" path="res://assets/images/tanks/tank2/tank2-export3.png" id="3_tank2"]
+[ext_resource type="Texture2D" path="res://assets/images/tanks/tank2/tank2-export4.png" id="4_tank2"]
+[ext_resource type="Texture2D" path="res://assets/images/tanks/tank2/tank2-export5.png" id="5_tank2"]
+[ext_resource type="Texture2D" path="res://assets/images/tanks/tank2/tank2-export6.png" id="6_tank2"]
+[ext_resource type="Texture2D" path="res://assets/images/tanks/tank2/tank2-export7.png" id="7_tank2"]
+[ext_resource type="Texture2D" path="res://assets/images/tanks/tank2/tank2-export8.png" id="8_tank2"]
+[ext_resource type="Texture2D" path="res://assets/images/tanks/tank2/tank2-export9.png" id="9_tank2"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_tank2")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_tank2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_tank2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_tank2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_tank2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_tank2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_tank2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_tank2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_tank2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_tank2")
+}],
+"loop": true,
+"name": &"move",
+"speed": 8.0
+}]

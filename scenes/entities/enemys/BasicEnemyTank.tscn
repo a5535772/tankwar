@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3 uid="uid://dq5h3k8jmyqvx"]
+
+[ext_resource type="Script" path="res://scripts/entities/tanks/BasicEnemyTank.gd" id="1_enemy"]
+[ext_resource type="SpriteFrames" uid="uid://cjm3h8k5nqvw2" path="res://assets/images/tanks/sprite_frames/tank3_body_frames.tres" id="2_body"]
+[ext_resource type="SpriteFrames" uid="uid://qyjvinsvclol" path="res://assets/images/tanks/sprite_frames/track_frames.tres" id="3_track"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(28, 28)
+
+[node name="BasicEnemyTank" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 51
+script = ExtResource("1_enemy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="TrackLeft" type="AnimatedSprite2D" parent="."]
+position = Vector2(-12, 0)
+sprite_frames = ExtResource("3_track")
+animation = &"move"
+
+[node name="TrackRight" type="AnimatedSprite2D" parent="."]
+position = Vector2(12, 0)
+sprite_frames = ExtResource("3_track")
+animation = &"move"
+
+[node name="TankBody" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_body")
+animation = &"move"
+
+[node name="DirectionTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[node name="HurtArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtArea"]
+shape = SubResource("RectangleShape2D_1")

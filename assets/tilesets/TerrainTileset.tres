@@ -1,0 +1,6 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://test_tileset_v1"]
+
+[resource]
+tile_size = Vector2i(32, 32)
+physics_layer_0/collision_layer = 16
+physics_layer_1/collision_layer = 32
