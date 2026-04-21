@@ -21,8 +21,8 @@ var owner_tank: Tank = null
 ## 子弹颜色(占位用)
 var bullet_color: Color = Color.YELLOW
 
-## 战场边界（标准 13×13 网格 = 416×416 像素）
-const BATTLEFIELD_SIZE: Vector2 = Vector2(416, 416)
+## 战场边界（960×544 像素，30×17 格）
+const BATTLEFIELD_SIZE: Vector2 = Vector2(960, 544)
 
 ## 碰撞层定义
 const CollisionLayersClass = preload("res://scripts/systems/CollisionLayers.gd")
@@ -109,7 +109,12 @@ func _handle_tilemap_collision(tilemap: TileMapLayer) -> void:
 		return
 
 	# 读取瓦片类型（Custom Data）
-	var tile_type: String = tile_data.get_custom_data("tile_type")
+	var tile_type: Variant = tile_data.get_custom_data("tile_type")
+	
+	# 如果 tile_type 为空，直接销毁子弹
+	if tile_type == null or not tile_type is String:
+		queue_free()
+		return
 
 	# 根据瓦片类型执行不同逻辑
 	match tile_type:

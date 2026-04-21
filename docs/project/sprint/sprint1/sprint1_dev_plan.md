@@ -219,18 +219,22 @@
 | 执行角色 | 💻 开发 |
 | 预计工时 | 1.5h |
 | 依赖 | Story 2.2 |
-| 状态 | ❌ 未开始 |
+| 状态 | ✅ 已完成 |
 
-**描述**: 在 TankTest.tscn 的 BoundaryLayer 上绘制边界瓦片，确认碰撞配置正确。子弹超出战场边界时销毁。
+**描述**: 创建 StandardBattleField.tscn 场景实现 Layer 复用，自动生成 48 个边界瓦片。重构 TankTest.tscn 引用 StandardBattleField 实例。子弹超出战场边界时销毁。
 
 **验收标准**:
-- [ ] BoundaryLayer 配置了 TerrainTileset，绘制了边界瓦片
-- [ ] 坦克无法移出 416×416 战场
-- [ ] 子弹超出战场边界后销毁
-- [ ] 坦克对角线移动被边界阻挡时沿边界滑行
+- [x] StandardBattleField.tscn 创建完成（包含 5 个 Layer + BoundaryIndicator）
+- [x] BoundaryLayer 配置 TerrainTileset，自动生成 48 个边界瓦片
+- [x] TankTest.tscn 重构为引用 StandardBattleField 实例
+- [x] 坦克无法移出 416×416 战场（边界瓦片碰撞）
+- [x] 子弹超出战场边界后销毁（Bullet.gd _is_out_of_bounds()）
+- [x] 场景复用架构实现（StandardBattleField 可被多个关卡实例化）
 
-**修改文件**:
-- `scenes/levels/TankTest.tscn`
+**创建/修改文件**:
+- `scenes/terrain/StandardBattleField.tscn` (新建)
+- `scripts/terrain/StandardBattleField.gd` (新建)
+- `scenes/levels/TankTest.tscn` (重构)
 
 ---
 

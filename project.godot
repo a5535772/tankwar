@@ -21,4 +21,6 @@ EventBus="*res://scripts/systems/EventBus.gd"
 
 [display]
 
+window/size/viewport_width=960
+window/size/viewport_height=544
 window/stretch/mode="canvas_items"
