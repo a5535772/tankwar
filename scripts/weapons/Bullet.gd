@@ -1,5 +1,5 @@
 ## 子弹基类
-## 处理子弹的移动、碰撞检测
+## 处理子弹的移动、碰撞检测、TileMap 交互
 class_name Bullet
 extends Area2D
 
@@ -21,6 +21,9 @@ var owner_tank: Tank = null
 ## 子弹颜色(占位用)
 var bullet_color: Color = Color.YELLOW
 
+## 战场边界（标准 13×13 网格 = 416×416 像素）
+const BATTLEFIELD_SIZE: Vector2 = Vector2(416, 416)
+
 ## 碰撞层定义
 const CollisionLayersClass = preload("res://scripts/systems/CollisionLayers.gd")
 
@@ -31,10 +34,10 @@ func _ready() -> void:
 
 	# 设置碰撞层(根据发射者设置,这里默认为玩家子弹)
 	collision_layer = CollisionLayersClass.LAYER_PLAYER_BULLET
-	# 检测地形、敌人、边界
+	# 检测地形、敌人
+	# 注意：移除 LAYER_BOUNDARY，边界瓦片使用 TERRAIN 层，子弹不应被水域阻挡
 	collision_mask = CollisionLayersClass.LAYER_TERRAIN | \
-					CollisionLayersClass.LAYER_ENEMY | \
-					CollisionLayersClass.LAYER_BOUNDARY
+					CollisionLayersClass.LAYER_ENEMY
 
 	# 更新占位颜色
 	_update_bullet_color()
@@ -48,10 +51,16 @@ func _process(delta: float) -> void:
 	# 移动子弹
 	position += direction * speed * delta
 
-	# 超出屏幕范围则销毁
-	var viewport_rect := get_viewport_rect()
-	if not viewport_rect.has_point(position):
+	# 战场边界检测（替代 viewport 检测）
+	if _is_out_of_bounds():
 		queue_free()
+
+
+## 检查是否超出战场边界
+func _is_out_of_bounds() -> bool:
+	# 战场范围: 0 ~ 416 像素
+	return global_position.x < 0 or global_position.x > BATTLEFIELD_SIZE.x or \
+		   global_position.y < 0 or global_position.y > BATTLEFIELD_SIZE.y
 
 
 ## 更新子弹颜色(占位实现)
@@ -65,18 +74,59 @@ func _update_bullet_color() -> void:
 
 ## 碰撞体进入检测
 func _on_body_entered(body: Node2D) -> void:
-	# 碰到地形或边界
+	# TileMapLayer 碰撞处理（优先检测）
+	if body is TileMapLayer:
+		_handle_tilemap_collision(body)
+		return
+
+	# 原有逻辑：组检测（兼容非 TileMap 的 StaticBody2D 等实体）
 	if body.is_in_group("terrain") or body.is_in_group("boundary"):
 		# 如果是砖墙,销毁砖墙
 		if body.is_in_group("brick_wall"):
-			body.destroy()
+			if body.has_method("destroy"):
+				body.destroy()
 			queue_free()
 		# 如果是钢墙
 		elif body.is_in_group("steel_wall"):
-			if can_destroy_steel:
+			if can_destroy_steel and body.has_method("destroy"):
 				body.destroy()
 			queue_free()
 		else:
+			queue_free()
+
+
+## 处理 TileMapLayer 碰撞
+func _handle_tilemap_collision(tilemap: TileMapLayer) -> void:
+	# 获取子弹位置对应的瓦片坐标
+	var tile_coords: Vector2i = tilemap.local_to_map(global_position)
+
+	# 获取瓦片数据
+	var tile_data: TileData = tilemap.get_cell_tile_data(tile_coords)
+
+	# 如果没有瓦片数据，直接销毁子弹（可能在边界外）
+	if tile_data == null:
+		queue_free()
+		return
+
+	# 读取瓦片类型（Custom Data）
+	var tile_type: String = tile_data.get_custom_data("tile_type")
+
+	# 根据瓦片类型执行不同逻辑
+	match tile_type:
+		"brick":
+			# 砖墙：摧毁瓦片 + 销毁子弹
+			tilemap.erase_cell(tile_coords)
+			queue_free()
+		"steel":
+			# 钢墙：Lv.3 可摧毁，其他销毁子弹
+			if can_destroy_steel:
+				tilemap.erase_cell(tile_coords)
+			queue_free()
+		"boundary":
+			# 边界墙：仅销毁子弹
+			queue_free()
+		_:
+			# 其他类型：销毁子弹
 			queue_free()
 
 

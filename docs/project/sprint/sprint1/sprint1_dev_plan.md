@@ -133,20 +133,20 @@
 | 优先级 | P0 |
 | 执行角色 | 🏗️ 架构师 |
 | 预计工时 | 2h |
-| 状态 | ❌ 未开始 |
+| 状态 | ✅ 已完成 |
 
 **描述**: 设计 TerrainTileset 的 TileSet 配置方案，包括自定义数据层(Custom Data Layer)定义、Physics Layer 分配、瓦片类型标记策略。这是后续所有地形开发的基础。
 
 **产出**:
-- TileSet 配置方案文档（简短，可写在代码注释中）
-- 确定：砖墙/钢墙/边界/水域各自的 Physics Layer 映射
-- 确定：Custom Data Layer 中 `tile_type` 的枚举值
-- 确定：水域碰撞层方案（PRD建议用与边界相同层bit 5）
+- ✅ TileSet 配置方案文档 → `docs/project/game/architecture/adr_001_tileset_configuration.md`
+- ✅ 确定：砖墙/钢墙/边界各自的 Physics Layer 映射
+- ✅ 确定：Custom Data Layer 中 `tile_type` 的枚举值
+- ✅ 确定：水域碰撞层方案（使用 LAYER_BOUNDARY，子弹 mask 移除 LAYER_BOUNDARY）
 
 **验收标准**:
-- [ ] 方案可指导开发人员配置 TileSet
-- [ ] 碰撞层方案不会导致子弹误判地形类型
-- [ ] 方案具备扩展性（后续加草地/冰面无需改架构）
+- [x] 方案可指导开发人员配置 TileSet
+- [x] 碰撞层方案不会导致子弹误判地形类型
+- [x] 方案具备扩展性（后续加草地/冰面无需改架构）
 
 **参考文件**:
 - PRD 5.2 方案 A（推荐方案）
@@ -162,19 +162,22 @@
 | 执行角色 | 💻 开发 |
 | 预计工时 | 2h |
 | 依赖 | Story 2.1 |
-| 状态 | ❌ 未开始 |
+| 状态 | ✅ 已完成 |
 
-**描述**: 根据 Story 2.1 的设计方案，在 Godot 编辑器中配置 TerrainTileset.tres：添加自定义数据层、Physics Layer、砖墙/钢墙/边界瓦片定义及碰撞形状。
+**描述**: 根据 Story 2.1 的设计方案，在 Godot 编辑器中配置 TerrainTileset.tres：添加自定义数据层、Physics Layer、砖墙/钢墙/边界瓦片定义及碰撞形状。同时在 TankTest.tscn 中绑定 TerrainTileset 到 WallLayer/BoundaryLayer。
 
 **验收标准**:
-- [ ] TerrainTileset.tres 包含 Custom Data Layer `tile_type`
-- [ ] 砖墙瓦片标记 `tile_type = "brick"`，碰撞在 LAYER_TERRAIN(bit 4)
-- [ ] 钢墙瓦片标记 `tile_type = "steel"`，碰撞在 LAYER_TERRAIN(bit 4)
-- [ ] 边界瓦片标记 `tile_type = "boundary"`，碰撞在 LAYER_BOUNDARY(bit 5)
-- [ ] 瓦片有占位视觉区分（砖=棕色，钢=灰色，边界=深色）
+- [x] TerrainTileset.tres 包含 Custom Data Layer `tile_type`
+- [x] 砖墙瓦片标记 `tile_type = "brick"`，碰撞在 LAYER_TERRAIN(bit 4)
+- [x] 钢墙瓦片标记 `tile_type = "steel"`，碰撞在 LAYER_TERRAIN(bit 4)
+- [x] 边界瓦片标记 `tile_type = "boundary"`，碰撞在 **LAYER_TERRAIN(bit 4)**（ADR-001修正：不是bit 5）
+- [x] 瓦片有占位视觉区分（砖=棕色，钢=灰色，边界=深色）
+- [x] TankTest.tscn 中 WallLayer 绑定 TerrainTileset
+- [x] TankTest.tscn 中 BoundaryLayer 绑定 TerrainTileset
 
 **修改文件**:
 - `assets/tilesets/TerrainTileset.tres`
+- `scenes/levels/TankTest.tscn`
 
 ---
 
@@ -187,19 +190,20 @@
 | 执行角色 | 💻 开发 |
 | 预计工时 | 3h |
 | 依赖 | Story 2.2 |
-| 状态 | ❌ 未开始 |
+| 状态 | ✅ 已完成 |
 
-**描述**: 重构 Bullet.gd 的碰撞处理，适配 TileMapLayer API。当 body 是 TileMapLayer 时，通过碰撞坐标获取瓦片信息，根据 tile_type 执行不同逻辑（砖墙摧毁、钢墙判断等）。
+**描述**: 重构 Bullet.gd 的碰撞处理，适配 TileMapLayer API。当 body 是 TileMapLayer 时，通过碰撞坐标获取瓦片信息，根据 tile_type 执行不同逻辑（砖墙摧毁、钢墙判断等）。移除 LAYER_BOUNDARY mask，改为战场矩形边界检测。
 
 **验收标准**:
-- [ ] _on_body_entered() 能正确识别 TileMapLayer 碰撞
-- [ ] _handle_tilemap_collision() 通过 get_cell_tile_data() 读取 tile_type
-- [ ] brick 类型 → tilemap.erase_cell() + 子弹销毁
-- [ ] steel 类型 + can_destroy_steel → tilemap.erase_cell() + 子弹销毁
-- [ ] steel 类型 + !can_destroy_steel → 仅子弹销毁
-- [ ] boundary 类型 → 子弹销毁
-- [ ] 保留原有的非 TileMap 碰撞处理（敌人 HurtArea 等）
-- [ ] 子弹边界检测从 viewport 改为战场矩形检测
+- [x] _on_body_entered() 能正确识别 TileMapLayer 碰撞
+- [x] _handle_tilemap_collision() 通过 get_cell_tile_data() 读取 tile_type
+- [x] brick 类型 → tilemap.erase_cell() + 子弹销毁
+- [x] steel 类型 + can_destroy_steel → tilemap.erase_cell() + 子弹销毁
+- [x] steel 类型 + !can_destroy_steel → 仅子弹销毁
+- [x] boundary 类型 → 子弹销毁
+- [x] 保留原有的非 TileMap 碰撞处理（敌人 HurtArea 等）
+- [x] 子弹边界检测从 viewport 改为战场矩形检测（416×416）
+- [x] collision_mask 移除 LAYER_BOUNDARY
 
 **修改文件**:
 - `scripts/weapons/Bullet.gd`

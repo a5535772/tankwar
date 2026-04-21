@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=4 uid="uid://dut71kxj06vju"]
+[gd_scene load_steps=7 format=4 uid="uid://dut71kxj06vju"]
 
 [ext_resource type="TileSet" uid="uid://bmqxbhf07chux" path="res://assets/tilesets/GroundTileset.tres" id="1_mwih8"]
 [ext_resource type="PackedScene" uid="uid://4kp7vlu2ope3" path="res://scenes/entities/tanks/Player1Tank.tscn" id="1_player1"]
 [ext_resource type="TileSet" uid="uid://161miuc4tsnq" path="res://assets/tilesets/WaterTileset.tres" id="2_dle0x"]
 [ext_resource type="PackedScene" uid="uid://du6yi1nt00705" path="res://scenes/entities/tanks/Player2Tank.tscn" id="2_player2"]
 [ext_resource type="PackedScene" uid="uid://dq5h3k8jmyqvx" path="res://scenes/entities/enemys/BasicEnemyTank.tscn" id="3_enemy"]
+[ext_resource type="TileSet" uid="uid://bnqmuxhom6qxr" path="res://assets/tilesets/TerrainTileset.tres" id="terrain_tileset"]
 
 [node name="TankTest" type="Node2D"]
 
@@ -21,8 +22,10 @@ tile_set = ExtResource("1_mwih8")
 tile_set = ExtResource("2_dle0x")
 
 [node name="WallLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("terrain_tileset")
 
 [node name="BoundaryLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("terrain_tileset")
 
 [node name="Player1Tank" parent="." instance=ExtResource("1_player1")]
 position = Vector2(238, 353)

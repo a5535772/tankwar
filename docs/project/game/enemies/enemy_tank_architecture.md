@@ -303,4 +303,4 @@ func _update_movement():
 
 - [GDScript 风格指南](../CONTRIBUTING.md#代码风格规范)
 - [AI 工作记录](../ai2ai/AI2AI.md)
-- [项目架构](../game/architecture/project_structure.md)
+- [地形系统设计](../terrain/terrain_system_design.md)

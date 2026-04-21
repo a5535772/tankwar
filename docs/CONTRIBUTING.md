@@ -156,7 +156,7 @@ func move_tank(input_dir: Vector2) -> void:
 2. **阅读相关文档**
    - `docs/me2ai/OVERVIEW.md` - 项目概要
    - `docs/me2ai/TECH_STACK.md` - 技术栈
-   - `docs/game/architecture/project_structure.md` - 架构设计
+   - `docs/project/game/terrain/terrain_system_design.md` - 地形系统设计
 
 3. **实现功能**
    - 遵循现有代码结构

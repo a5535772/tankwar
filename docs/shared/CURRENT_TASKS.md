@@ -422,9 +422,9 @@
 - [x] `docs/shared/IMPLEMENTATION_STATUS.md` - 本文档
 - [x] `docs/game/player/武器系统设计文档.md` - 已标注完成状态
 - [x] `docs/game/enemies/enemy_tank_architecture.md` - 已标注待办项
-- [x] `docs/game/architecture/project_structure.md` - 已更新引用
-- [x] `docs/game/architecture/collision_system_design.md` - 新建
-- [x] `docs/game/architecture/terrain_boundary_design.md` - 新建
+- [x] `docs/project/game/terrain/terrain_system_design.md` - 合并后地形设计文档
+- [x] `docs/project/game/terrain/boundary_fix_requirements.md` - 精简后边界修复需求
+- [x] `docs/project/game/architecture/adr_001_tileset_configuration.md` - ADR-001
 
 ### 待更新文档
 

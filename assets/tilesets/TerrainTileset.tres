@@ -1,6 +1,33 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://test_tileset_v1"]
+[gd_resource type="TileSet" load_steps=7 format=3 uid="uid://bnqmuxhom6qxr"]
+
+[ext_resource type="Texture2D" uid="uid://oggbayjv0miw" path="res://assets/images/tiles/boundary.png" id="boundary"]
+[ext_resource type="Texture2D" uid="uid://br5t34c4ndvri" path="res://assets/images/tiles/brick_wall.png" id="brick"]
+[ext_resource type="Texture2D" uid="uid://bwsttcv4qt11j" path="res://assets/images/tiles/steel_wall.png" id="steel"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_brick"]
+texture = ExtResource("brick")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, 0, 32, 0, 32, 32, 0, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_steel"]
+texture = ExtResource("steel")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, 0, 32, 0, 32, 32, 0, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_boundary"]
+texture = ExtResource("boundary")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, 0, 32, 0, 32, 32, 0, 32)
 
 [resource]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 16
 physics_layer_1/collision_layer = 32
+custom_data_layer_0/name = "tile_type"
+custom_data_layer_0/type = 0
+sources/0 = SubResource("TileSetAtlasSource_brick")
+sources/1 = SubResource("TileSetAtlasSource_steel")
+sources/2 = SubResource("TileSetAtlasSource_boundary")
