@@ -79,9 +79,9 @@ func _init_weapon_configs() -> void:
 
 func _init_bullet_scenes() -> void:
 	# 加载子弹场景
-	bullet_scenes.append(preload("res://scenes/bullets/BasicBullet.tscn"))
-	bullet_scenes.append(preload("res://scenes/bullets/FastBullet.tscn"))
-	bullet_scenes.append(preload("res://scenes/bullets/SteelDestroyerBullet.tscn"))
+	bullet_scenes.append(preload("res://scenes/entities/weapons/bullets/BasicBullet.tscn"))
+	bullet_scenes.append(preload("res://scenes/entities/weapons/bullets/FastBullet.tscn"))
+	bullet_scenes.append(preload("res://scenes/entities/weapons/bullets/SteelDestroyerBullet.tscn"))
 
 
 func _process(delta: float) -> void:

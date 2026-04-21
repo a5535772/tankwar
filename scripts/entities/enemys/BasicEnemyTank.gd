@@ -1,7 +1,7 @@
 ## 基础敌人坦克
 ## 实现简单的随机巡逻行为
 class_name BasicEnemyTank
-extends "res://scripts/entities/tanks/EnemyTankBase.gd"
+extends "res://scripts/entities/enemys/EnemyTankBase.gd"
 
 
 ## 基础敌人坦克使用默认的随机巡逻行为

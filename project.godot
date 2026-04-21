@@ -15,10 +15,10 @@ run/main_scene="res://scenes/levels/TankTest.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
-[display]
-
-window/stretch/mode="canvas_items"
-
 [autoload]
 
 EventBus="*res://scripts/systems/EventBus.gd"
+
+[display]
+
+window/stretch/mode="canvas_items"
