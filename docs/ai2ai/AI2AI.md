@@ -1,5 +1,67 @@
 # AI 工作记录
 
+## 2026-04-21
+
+### Story 1.1: 修复玩家组注册 Bug ✅
+
+**修改文件**:
+- `scripts/entities/tanks/PlayerTank.gd` — 在 `_ready()` 中添加 `add_to_group("player_tanks")`
+
+**修复内容**:
+- PlayerTank 现在会在 `_ready()` 时注册到 `"player_tanks"` 组
+- 修复了 `PowerUp.gd` 中 `body.is_in_group("player_tanks")` 始终返回 false 导致道具无法拾取的问题
+- 为后续追踪型敌人（ChaseEnemyTank）的 `_find_nearest_player()` 查找 `"player_tanks"` 组铺平道路
+
+**对应PRD**: 4.4 [P0] 玩家组注册（Bug 修复）
+**对应Dev Plan**: Story 1.1
+
+---
+
+### Sprint 1 开发计划制定
+
+**产出文件**:
+- `docs/project/sprint/sprint1/sprint1_dev_plan.md` — Sprint 1 开发计划
+
+**关键内容**:
+- 盘点了 PRD 制定前已完成的16项功能（坦克基类、武器系统、碰撞层定义等）
+- 将 PRD 的20项需求拆解为22个 Story，按5个 Phase 组织
+- 明确了角色分工：架构师负责 TileSet 配置方案设计(1个Story)，开发负责具体实现(18个Story)，PM负责验收和文档(3个Story)
+- 识别了关键依赖链：TileSet 设计→配置→子弹适配→地形实现 为核心路径
+- 估算总工时约43h，预计7-8个工作日
+
+**发现的实现缺口**:
+- Bullet.gd 缺少 owner_tank 属性 → 充能掠夺无法识别击杀者
+- PlayerTank.gd 未添加 player_tanks 组 → 道具无法拾取
+- EnemyTankBase.gd 的 take_damage() 血量扣减为 TODO → 敌人无法被击杀
+- EnemyTankBase.gd 的 fire() 为 TODO → 敌人无法射击
+- TankTest.tscn 的 WallLayer/BoundaryLayer 未配置 TileSet → 地形碰撞不生效
+- 不存在 EnemyBullet 场景和脚本
+
+---
+
+### 游戏设计文档编写
+
+**产出文件**:
+1. `docs/project/game/game_overview.md` — 游戏概要文档
+2. `docs/project/game/evolution_roadmap.md` — 演进计划文档（5期路线图）
+3. `docs/project/sprint/sprint1_prd.md` — Sprint 1 详细产品需求说明书
+
+**关键设计决策**:
+- 定义了 4 条设计支柱：一炮一决、攻守博弈、火力进化、可破坏战场
+- 将开发分为 5 期：核心验证 → 单关可玩 → 多关卡 → 视听打磨 → 扩展发布
+- Sprint 1 聚焦在 TankTest.tscn 中验证核心机制，共 20 项需求（11 项 P0）
+- 识别了 2 个必须修复的 bug：玩家组注册缺失、子弹击杀者传递 null
+- 地形碰撞采用 TileSet Custom Data Layer 方案，比多 TileMapLayer 更灵活
+
+**发现的关键问题**:
+- PlayerTank 未添加到 "player_tanks" 组 → 道具无法拾取 + 追踪敌人找不到玩家
+- Bullet.gd 的 take_damage() 传入 null attacker → 充能掠夺无法识别击杀者
+- Player2Tank 未实现射击方法 → 玩家2无法游玩
+- 所有输入使用硬编码键位 → 无法自定义
+- 子弹与 TileMapLayer 碰撞需要特殊处理（body 是整个 TileMapLayer）
+
+---
+
 ## 2026-04-10
 
 ### 武器系统开发 - Phase 1, 2 & 3 完成

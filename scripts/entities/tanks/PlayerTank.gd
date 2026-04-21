@@ -13,6 +13,9 @@ var hud: WeaponHUD = null
 func _ready() -> void:
 	super._ready()
 
+	# 注册到玩家组，供道具拾取检测和追踪敌人查找
+	add_to_group("player_tanks")
+
 	# 初始化武器管理器
 	weapon_manager = WeaponManager.new()
 	weapon_manager.name = "WeaponManager"

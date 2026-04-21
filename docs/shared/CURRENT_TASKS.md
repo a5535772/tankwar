@@ -1,7 +1,9 @@
 # 项目实施状态总览
 
-**最后更新**: 2026-04-10
+**最后更新**: 2026-04-21
 **维护者**: AI Assistant
+**当前Sprint**: Sprint 1 - 核心机制验证
+**开发计划**: `docs/project/sprint/sprint1/sprint1_dev_plan.md`
 
 ---
 
@@ -40,6 +42,7 @@
   - [x] 武器管理器集成
   - [x] HUD 连接
   - [x] 敌人击杀事件处理
+  - [x] 玩家组注册 (`add_to_group("player_tanks")`) — Sprint1 Story1.1
 
 - [x] **EnemyTankBase.gd** - 敌人坦克基类
   - [x] 随机移动 AI (`_change_direction_randomly()`)

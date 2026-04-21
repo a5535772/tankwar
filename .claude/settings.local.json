@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__aionui-team-7e66dd42-a2fe-498f-a3e2-0475e1ed2d17__team_spawn_agent",
+      "mcp__aionui-team-7e66dd42-a2fe-498f-a3e2-0475e1ed2d17__team_task_list",
+      "mcp__aionui-team-7e66dd42-a2fe-498f-a3e2-0475e1ed2d17__team_send_message",
+      "mcp__aionui-team-7e66dd42-a2fe-498f-a3e2-0475e1ed2d17__team_members"
+    ]
+  }
+}
