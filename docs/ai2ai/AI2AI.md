@@ -33,6 +33,23 @@
 
 ---
 
+### Story 1.3: 完善敌人血量系统 ✅
+
+**修改文件**:
+- `scripts/entities/enemys/EnemyTankBase.gd` — 添加 `@export var max_hp: int = 1` 和 `var current_hp: int`，_ready() 中初始化 `current_hp = max_hp`，take_damage() 实现血量扣减和死亡判定
+- `scripts/entities/enemys/BasicEnemyTank.gd` — 添加注释说明基础敌人一击必杀（max_hp = 1 继承自基类）
+
+**修复内容**:
+- EnemyTankBase 现在有完整的血量系统：max_hp（可配置）和 current_hp（运行时）
+- take_damage() 实际扣减 current_hp，血量归零时调用 die()
+- 修复了敌人"无敌"的问题：之前 take_damage() 只打印日志，敌人永远不会死
+- 完整链路：子弹击中 → take_damage() → current_hp -= damage → current_hp <= 0 → die() → enemy_killed 信号 → 充能掠夺 → queue_free()
+
+**对应PRD**: 3.1 [P0] 完善敌人血量系统
+**对应Dev Plan**: Story 1.3
+
+---
+
 ### Sprint 1 开发计划制定
 
 **产出文件**:

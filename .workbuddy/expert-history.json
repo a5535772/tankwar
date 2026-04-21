@@ -36,6 +36,15 @@
     ],
     "9b1b7eff62e64062b2f63a946bf70506": [
       {
+        "expertId": "SoftwareArchitect",
+        "name": "架构通",
+        "profession": "软件架构师",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/02-Engineering/SoftwareArchitect/SoftwareArchitect.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/02-Engineering/SoftwareArchitect/SoftwareArchitect_zh.md",
+        "usedAt": 1776758291866,
+        "industryId": "02-Engineering"
+      },
+      {
         "expertId": "SeniorDeveloper",
         "name": "吴八哥",
         "profession": "高级开发工程师",
@@ -46,5 +55,5 @@
       }
     ]
   },
-  "lastUpdated": 1776756060214
+  "lastUpdated": 1776758291866
 }

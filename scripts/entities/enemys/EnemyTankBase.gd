@@ -35,6 +35,15 @@ var current_move_direction: MoveDirection = MoveDirection.DOWN
 var last_attacker: Tank = null
 
 
+# === 血量系统 ===
+
+## 最大血量（可在编辑器中配置，不同敌人类型有不同血量）
+@export var max_hp: int = 1
+
+## 当前血量
+var current_hp: int
+
+
 # === TODO: 后续实现 ===
 # TODO: 玩家追踪
 # var target_player: Tank = null
@@ -50,6 +59,9 @@ var last_attacker: Tank = null
 
 
 func _ready() -> void:
+	# 初始化血量
+	current_hp = max_hp
+
 	# 配置敌人碰撞层
 	collision_layer_type = CollisionLayersClass.LAYER_ENEMY
 	# 检测地形、边界、敌人（友军）、玩家
@@ -130,9 +142,16 @@ func get_charge_value() -> int:
 func take_damage(damage: int, attacker: Tank) -> void:
 	# 记录最后攻击者
 	last_attacker = attacker
+	
+	# 扣减血量
+	current_hp -= damage
+	
 	# 输出受伤日志
-	print("[EnemyTank] %s 受到 %d 点伤害，攻击者: %s" % [name, damage, attacker.name if attacker else "未知"])
-	# TODO: 实现血量扣减和死亡逻辑
+	print("[EnemyTank] %s 受到 %d 点伤害，剩余血量: %d/%d，攻击者: %s" % [name, damage, current_hp, max_hp, attacker.name if attacker else "未知"])
+	
+	# 血量归零时死亡
+	if current_hp <= 0:
+		die()
 
 
 ## 死亡处理

@@ -107,15 +107,15 @@
 | 优先级 | P0 |
 | 执行角色 | 💻 开发 |
 | 预计工时 | 1h |
-| 状态 | ❌ 未开始 |
+| 状态 | ✅ 已完成 |
 
 **描述**: EnemyTankBase 添加 max_hp 和 current_hp，实现 take_damage() 实际扣减血量，血量归零调用 die()。不同敌人类型可配置不同 max_hp。
 
 **验收标准**:
-- [ ] EnemyTankBase 有 `@export var max_hp: int = 1` 和 `var current_hp: int`
-- [ ] _ready() 中 `current_hp = max_hp`
-- [ ] take_damage() 实际扣减 current_hp，归零调用 die()
-- [ ] BasicEnemyTank 默认 max_hp = 1
+- [x] EnemyTankBase 有 `@export var max_hp: int = 1` 和 `var current_hp: int`
+- [x] _ready() 中 `current_hp = max_hp`
+- [x] take_damage() 实际扣减 current_hp，归零调用 die()
+- [x] BasicEnemyTank 默认 max_hp = 1
 
 **修改文件**:
 - `scripts/entities/enemys/EnemyTankBase.gd`

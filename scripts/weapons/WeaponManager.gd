@@ -41,6 +41,11 @@ func _ready() -> void:
 		add_child(main_weapon)
 		print("WeaponManager: 主武器已创建")
 
+	# 设置主武器的所有者坦克（确保子弹的 owner_tank 不为 null）
+	var owner_tank := get_parent() as Tank
+	if owner_tank and main_weapon:
+		main_weapon.set_owner_tank(owner_tank)
+
 	# 初始化副武器
 	_init_secondary_weapons()
 

@@ -7,6 +7,9 @@ extends "res://scripts/entities/enemys/EnemyTankBase.gd"
 ## 基础敌人坦克使用默认的随机巡逻行为
 ## 如需自定义行为，可以重写 _on_decision_tick() 方法
 
+## 血量配置：基础敌人一击必杀（max_hp = 1，继承自基类）
+## 如需增加血量，可在编辑器中修改 max_hp 属性
+
 
 func _ready() -> void:
 	# 添加到敌人坦克组
