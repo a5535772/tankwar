@@ -134,6 +134,7 @@ func fire(position: Vector2, direction: Vector2) -> bool:
 	bullet.damage = weapon_data.bullet_damage
 	bullet.can_destroy_steel = weapon_data.can_destroy_steel
 	bullet.bullet_color = weapon_data.bullet_color
+	bullet.owner_tank = owner_tank
 
 	# 添加到场景
 	get_tree().current_scene.add_child(bullet)

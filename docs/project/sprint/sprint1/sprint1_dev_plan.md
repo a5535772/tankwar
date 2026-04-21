@@ -83,15 +83,15 @@
 | 优先级 | P0 |
 | 执行角色 | 💻 开发 |
 | 预计工时 | 1h |
-| 状态 | ❌ 未开始 |
+| 状态 | ✅ 已完成 |
 
 **描述**: Bullet 添加 `owner_tank` 属性，MainWeapon.fire() 时设置 bullet.owner_tank，_on_area_entered() 中正确传递 attacker 参数，修复充能掠夺无法识别击杀者的问题。
 
 **验收标准**:
-- [ ] Bullet.gd 包含 `var owner_tank: Tank = null`
-- [ ] MainWeapon.fire() 中设置 `bullet.owner_tank`
-- [ ] _on_area_entered() 调用 `take_damage(damage, owner_tank)` 而非 `take_damage(damage, null)`
-- [ ] 击杀敌人后充能值正确归属到击杀者
+- [x] Bullet.gd 包含 `var owner_tank: Tank = null`
+- [x] MainWeapon.fire() 中设置 `bullet.owner_tank`
+- [x] _on_area_entered() 调用 `take_damage(damage, owner_tank)` 而非 `take_damage(damage, null)`
+- [x] 击杀敌人后充能值正确归属到击杀者
 
 **修改文件**:
 - `scripts/weapons/Bullet.gd` — 添加 owner_tank 属性，修复 _on_area_entered()

@@ -15,6 +15,9 @@ var direction: Vector2 = Vector2.UP
 ## 是否可摧毁钢墙
 var can_destroy_steel: bool = false
 
+## 子弹所有者（发射该子弹的坦克），用于击杀者追踪和充能掠夺
+var owner_tank: Tank = null
+
 ## 子弹颜色(占位用)
 var bullet_color: Color = Color.YELLOW
 
@@ -84,7 +87,7 @@ func _on_area_entered(area: Area2D) -> void:
 		# 造成伤害
 		var enemy_tank = area.get_parent()
 		if enemy_tank.has_method("take_damage"):
-			enemy_tank.take_damage(damage, null)
+			enemy_tank.take_damage(damage, owner_tank)
 		queue_free()
 	# 碰到其他子弹（避免误伤）
 	elif area.is_in_group("bullets"):

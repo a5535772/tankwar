@@ -17,6 +17,22 @@
 
 ---
 
+### Story 1.2: 修复子弹击杀者追踪 Bug ✅
+
+**修改文件**:
+- `scripts/weapons/Bullet.gd` — 添加 `var owner_tank: Tank = null` 属性，`_on_area_entered()` 中将 `take_damage(damage, null)` 改为 `take_damage(damage, owner_tank)`
+- `scripts/weapons/MainWeapon.gd` — `fire()` 中添加 `bullet.owner_tank = owner_tank`
+
+**修复内容**:
+- 子弹现在知道是谁发射的（owner_tank），击中敌人时会正确传递攻击者信息
+- 修复了充能掠夺系统断裂的问题：之前 take_damage 传入 null → last_attacker 为 null → enemy_killed 信号中 killer 为 null → WeaponManager.on_enemy_killed() 中 killer != get_parent() → 充能永远无法增长
+- 修复后完整链路：MainWeapon.fire() 设置 owner_tank → Bullet 传递给 take_damage → EnemyTankBase 记录 last_attacker → die() 发出正确的 killer → WeaponManager 匹配成功 → 充能增长
+
+**对应PRD**: 5.3 [P0] 子弹击杀者追踪（Bug 修复）
+**对应Dev Plan**: Story 1.2
+
+---
+
 ### Sprint 1 开发计划制定
 
 **产出文件**:
