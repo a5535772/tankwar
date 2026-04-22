@@ -1,6 +1,97 @@
 # AI 工作记录
 
+## 2026-04-22
+
+### Bug 修复: 子弹打中砖墙不消失 ✅
+
+**修改文件**:
+- `assets/tilesets/TerrainTileset.tres` — 重新添加瓦片 custom_data 和修正类型
+
+**根因**:
+TerrainTileset.tres 中存在两个问题：
+1. `custom_data_layer_0/type = 0`（NIL 类型），应为 `4`（STRING 类型）
+2. 砖墙/钢墙/边界瓦片均缺少 `0:0/0/custom_data_0` 值
+
+**影响链路**:
+- `get_custom_data("tile_type")` 返回 null → tile_type 变为 "" → match 语句走默认分支 → 只销毁子弹不消除瓦片
+
+**修复内容**:
+- `custom_data_layer_0/type = 0` → `4`（String 类型）
+- 砖墙添加 `0:0/0/custom_data_0 = "brick"`
+- 钢墙添加 `0:0/0/custom_data_0 = "steel"`
+- 边界添加 `0:0/0/custom_data_0 = "boundary"`
+
+**备注**: 此问题与 Story 2.5 相同，之前已修复但 .tres 文件疑似被 Godot 编辑器重新导出时还原。需注意在编辑器中修改 TileSet 后检查 custom_data 是否保留。
+
+---
+
+### Bug 修复: 子弹穿模（穿过砖墙不触发碰撞） ✅
+
+**修改文件**:
+- `scripts/weapons/Bullet.gd` — 重构移动和碰撞检测逻辑
+
+**根因**:
+1. 子弹使用 `_process()` 移动，但 Area2D 的 `body_entered` 信号只在物理帧中触发，移动和碰撞检测不同步
+2. 高速子弹单帧移动距离（~6.7px at 60fps）可能跨越碰撞区域而不被检测到
+3. 子弹碰撞半径仅 4px，容易漏检
+
+**修复内容**:
+- `_process()` → `_physics_process()`：移动与碰撞检测同步
+- 添加分步移动（MAX_STEP=8px）：每步不超过 8px，高速子弹自动分多步移动
+- 每步移动后主动调用 `get_overlapping_bodies()/get_overlapping_areas()` 检测碰撞，不再仅依赖信号
+- 添加 `_hit` 标志防止 `queue_free` 延迟期间重复处理碰撞
+
+---
+
 ## 2026-04-21
+
+### Story 2.6: 实现钢墙 ✅
+
+**修改文件**:
+- `scripts/terrain/StandardBattleField.gd` — 添加 STEEL_SOURCE_ID/STEEL_ATLAS_COORDS 常量、`_create_steel_walls()` 和 `_place_steel_cluster()` 方法
+
+**实现内容**:
+- 3 组钢墙集群：左中(6,5)、右中(22,5)、中央大块(13,9)
+- 钢墙 source ID = 1（对应 TileSetAtlasSource_steel），custom_data_0 = "steel"
+- 子弹碰撞逻辑已在 Story 2.3 中实现：can_destroy_steel → erase_cell，否则仅 queue_free
+
+**验证链路**:
+- Lv.1/2 子弹 can_destroy_steel = false → match "steel" → 仅 queue_free()，钢墙完好
+- Lv.3 子弹 can_destroy_steel = true → match "steel" → erase_cell() + queue_free()
+- 钢墙使用 steel_wall.png 纹理（灰色），与砖墙（棕色）视觉区分
+
+**对应PRD**: 2.3 [P0] 钢墙
+**对应Dev Plan**: Story 2.6
+
+---
+
+### Story 2.5: 实现砖墙 ✅
+
+**修改文件**:
+- `assets/tilesets/TerrainTileset.tres` — 为 3 个瓦片添加 `custom_data_0` 值（brick/steel/boundary）
+- `scripts/terrain/StandardBattleField.gd` — 添加 `_create_brick_walls()` 和 `_place_brick_cluster()` 方法
+
+**修复内容**:
+- **关键修复**: TerrainTileset.tres 中 3 个瓦片（砖墙/钢墙/边界）缺少 `custom_data_0` 值，导致 `get_custom_data("tile_type")` 始终返回 null，子弹-TileMap 交互逻辑完全失效
+- 添加砖墙布局到 WallLayer：6 组砖墙集群（左上/中上/右上/左中/右中/基地保护）
+- 使用代码生成瓦片而非在 .tscn 中硬编码 tile_map_data，更易维护
+
+**实现决策**:
+- 砖墙布局通过 `StandardBattleField.gd` 的 `_create_brick_walls()` 方法在 _ready() 时生成
+- `_place_brick_cluster()` 辅助方法简化矩形区域砖墙放置
+- 砖墙 source ID = 0（对应 TileSetAtlasSource_brick），atlas 坐标 (0,0)
+
+**验证链路**:
+- 子弹 collision_mask 包含 LAYER_TERRAIN → 检测到 WallLayer 碰撞
+- _on_body_entered() → body is TileMapLayer → _handle_tilemap_collision()
+- get_custom_data("tile_type") 返回 "brick" → match "brick" → erase_cell() + queue_free()
+- 坦克 collision_mask 包含 LAYER_TERRAIN → 被砖墙阻挡
+- 多子弹安全：第二颗子弹碰到已移除瓦片 → tile_data == null → queue_free()
+
+**对应PRD**: 2.2 [P0] 砖墙
+**对应Dev Plan**: Story 2.5
+
+---
 
 ### Story 1.1: 修复玩家组注册 Bug ✅
 

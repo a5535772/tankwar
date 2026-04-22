@@ -98,13 +98,13 @@ func _find_nearest_enemy() -> void:
 
 ## 碰撞体进入检测
 func _on_body_entered(body: Node2D) -> void:
-	# 碰到敌人
 	if body.is_in_group("enemy_tanks"):
-		# 造成伤害
 		if body.has_method("take_damage"):
 			body.take_damage(damage, owner_tank)
-		# 销毁导弹
 		queue_free()
-	# 碰到地形
-	elif body.is_in_group("terrain"):
+	elif body is TileMapLayer:
+		TerrainInteractor.handle_hit(self, body, direction, false)
+	elif body.is_in_group("boundary"):
+		queue_free()
+	else:
 		queue_free()

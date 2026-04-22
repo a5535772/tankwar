@@ -225,65 +225,58 @@
 
 ---
 
-## 5. 地形系统 (❌ 0%)
+## 5. 地形系统 (🟡 60%)
 
 ### 5.1 TileMap资源 - ✅ 已完成
 
 - [x] `assets/tilesets/GroundTileset.tres` - 地面瓦片
 - [x] `assets/tilesets/WaterTileset.tres` - 水域瓦片
-- [x] `assets/tilesets/TerrainTileset.tres` - 地形瓦片
+- [x] `assets/tilesets/TerrainTileset.tres` - 地形瓦片（砖墙+钢墙+边界，含 custom_data tile_type）
 
-### 5.2 地形脚本 - ❌ 未开始
+### 5.2 TileSet碰撞配置 - ✅ 已完成
 
-- [ ] **scripts/terrain/TerrainBase.gd** - 地形基类
-- [ ] **scripts/terrain/BrickWall.gd** - 砖墙
-  - [ ] 可被子弹摧毁
-  - [ ] 碎裂动画
-- [ ] **scripts/terrain/SteelWall.gd** - 钢墙
-  - [ ] 需要特殊子弹摧毁
-  - [ ] 反弹效果
-- [ ] **scripts/terrain/Water.gd** - 水域
-  - [ ] 阻止坦克进入
-  - [ ] 子弹可穿过
-- [ ] **scripts/terrain/Ice.gd** - 冰面
-  - [ ] 滑动效果
-- [ ] **scripts/terrain/Grass.gd** - 草地
-  - [ ] 隐蔽效果
-- [ ] **scripts/terrain/BoundaryWall.gd** - 边界墙
-  - [ ] 不可摧毁
+- [x] TerrainTileset Physics Layer 0: LAYER_TERRAIN(16) — 砖墙/钢墙/边界
+- [x] TerrainTileset Physics Layer 1: LAYER_BOUNDARY(32) — 预留给水域
+- [x] Custom Data Layer: tile_type (String) — "brick"/"steel"/"boundary"
+- [x] 所有瓦片已设置 custom_data_0 值
 
-### 5.3 地形场景 - ❌ 未开始
+### 5.3 战场场景 - ✅ 已完成
 
-- [ ] `scenes/terrain/` 目录创建
-- [ ] 各地形元素场景文件
+- [x] `scenes/terrain/StandardBattleField.tscn` — 标准战场场景
+- [x] `scripts/terrain/StandardBattleField.gd` — 战场脚本（边界墙+砖墙生成）
+- [x] WallLayer 绑定 TerrainTileset
+- [x] 边界使用 StaticBody2D 薄墙（4px）
 
-### 5.4 TileSet碰撞配置 - ❌ 未开始
+### 5.4 砖墙 - ✅ 已完成
 
-- [ ] 创建 `WallTileset.tres`
-- [ ] 创建 `BoundaryTileset.tres`
-- [ ] 配置Physics Layer
-- [ ] 配置碰撞形状
+- [x] 砖墙瓦片在 WallLayer 上绘制（代码生成）
+- [x] 子弹击中砖墙 → 瓦片移除 + 子弹销毁（Bullet.gd _handle_tilemap_collision）
+- [x] 坦克被砖墙阻挡（LAYER_TERRAIN 碰撞）
+
+### 5.5 钢墙 - ✅ 已完成
+
+- [x] 钢墙瓦片在 WallLayer 上绘制（代码生成）
+- [x] Lv.1/2 子弹击中钢墙 → 子弹消失，钢墙完好
+- [x] Lv.3 子弹击中钢墙 → 钢墙摧毁 + 子弹销毁（can_destroy_steel 逻辑）
+- [x] 钢墙视觉与砖墙区分（灰色 vs 棕色）
+
+### 5.6 待实现 - ❌
+
+- [ ] **钢墙** — 在 WallLayer 上放置钢墙瓦片，验证 Lv.3 摧毁逻辑
+- [ ] **水域** — 配置 WaterTileset，坦克阻挡+子弹穿越
+- [ ] **草地** — P2 延期
+- [ ] **冰面** — P3 延期
 
 ---
 
-## 6. 边界系统 (❌ 0%)
+## 6. 边界系统 (✅ 100%)
 
-### 6.1 当前问题 - ⚠️ 待修复
+### 6.1 已完成 - ✅
 
-- [ ] **问题1**: 坦克可以移出边界
-  - 原因: BoundaryLayer未配置碰撞
-  - 优先级: 高
-
-- [ ] **问题2**: 子弹边界检测不准确
-  - 原因: 使用viewport而非战场边界
-  - 优先级: 高
-
-### 6.2 待实施功能 - ❌
-
-- [ ] 边界墙绘制
-- [ ] 边界碰撞配置
-- [ ] 子弹边界检测修复
-- [ ] 战场范围定义
+- [x] **StandardBattleField** — 标准战场场景，960×544 像素 (30×17 格)
+- [x] **边界碰撞** — 4 个 StaticBody2D 薄墙（LAYER_TERRAIN），坦克和子弹都无法穿越
+- [x] **子弹边界检测** — 使用战场矩形检测（Bullet.gd _is_out_of_bounds()）
+- [x] **BoundaryIndicator** — Line2D 绘制战场边框
 
 ---
 

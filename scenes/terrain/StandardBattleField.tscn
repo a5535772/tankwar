@@ -1,12 +1,10 @@
-[gd_scene load_steps=5 format=4 uid="uid://bcmaxdgiyagna"]
+[gd_scene load_steps=4 format=4 uid="uid://bcmaxdgiyagna"]
 
-[ext_resource type="Script" path="res://scripts/terrain/StandardBattleField.gd" id="battlefield_script"]
 [ext_resource type="TileSet" uid="uid://bmqxbhf07chux" path="res://assets/tilesets/GroundTileset.tres" id="ground_tileset"]
 [ext_resource type="TileSet" uid="uid://bnqmuxhom6qxr" path="res://assets/tilesets/TerrainTileset.tres" id="terrain_tileset"]
 [ext_resource type="TileSet" uid="uid://161miuc4tsnq" path="res://assets/tilesets/WaterTileset.tres" id="water_tileset"]
 
 [node name="StandardBattleField" type="Node2D"]
-script = ExtResource("battlefield_script")
 
 [node name="BoundaryIndicator" type="Line2D" parent="."]
 points = PackedVector2Array(0, 0, 960, 0, 960, 544, 0, 544, 0, 0)
@@ -21,4 +19,5 @@ tile_set = ExtResource("ground_tileset")
 tile_set = ExtResource("water_tileset")
 
 [node name="WallLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAUAAwAAAAAAAAAAAAVAAwAAAAAAAAAAAAXAAwAAAAAAAAAAAAYAAwAAAAAAAAAAAA=")
 tile_set = ExtResource("terrain_tileset")

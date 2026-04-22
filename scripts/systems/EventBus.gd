@@ -39,6 +39,14 @@ signal secondary_weapon_unlocked(weapon: Node)
 signal powerup_collected(power_up: Node, collector: Node)
 
 
+# === 地形相关信号 ===
+
+## 地形瓦片被摧毁
+## @param tile_type 瓦片类型 ("brick" 或 "steel")
+## @param coords 被摧毁的瓦片坐标
+signal terrain_destroyed(tile_type: String, coords: Vector2i)
+
+
 # === 关卡相关信号 ===
 
 ## 关卡开始信号
