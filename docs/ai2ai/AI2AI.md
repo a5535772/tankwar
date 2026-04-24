@@ -2,6 +2,36 @@
 
 ## 2026-04-24
 
+### Story 4.1: 配置水域地形 ✅
+
+**修改文件**:
+- `assets/tilesets/WaterTileset.tres` — 完整重写，添加 Physics Layer 配置和每个瓦片的碰撞形状
+
+**实现内容**:
+- `physics_layer_0/collision_layer = 32`（LAYER_BOUNDARY）
+- `physics_layer_0/collision_mask = 0`（瓦片不主动检测其他物体）
+- 为每个使用的水域瓦片（0:0, 0:1, ..., 6:3）添加 16×16 矩形碰撞形状
+- WaterLayer 已在 StandardBattleField.tscn 中绘制水域布局
+
+**碰撞层设计原理**:
+- 水域使用 LAYER_BOUNDARY(32) 而非 LAYER_TERRAIN(16)
+- 坦克 collision_mask 包含 LAYER_BOUNDARY → 坦克被水域阻挡
+- 子弹 collision_mask 不含 LAYER_BOUNDARY → 子弹可穿越水域
+
+**关键修复**:
+- 原配置 `collision_layer = 2147483648`（第31位）错误，改为 `32`（第5位）
+- 原配置缺少瓦片碰撞形状（polygon_0），导致水域不产生实际碰撞
+
+**验证链路**:
+- 坦克移动到水域 → collision_mask 检测 LAYER_BOUNDARY → StaticBody2D 碰撞 → move_and_slide() 阻挡
+- 子弹飞向水域 → collision_mask 不含 LAYER_BOUNDARY → 无碰撞 → 穿越继续飞行
+- 子弹超出战场 → _is_out_of_bounds() → queue_free()（416×416 矩形检测）
+
+**对应PRD**: 2.4 [P1] 水域
+**对应Dev Plan**: Story 4.1
+
+---
+
 ### Bug 排查: 子弹击中砖墙后无法消除砖块 (进行中)
 
 **问题现象**: 子弹击中砖墙后，碰撞检测正常（子弹被销毁），但砖墙不被消除。

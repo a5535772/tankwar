@@ -225,7 +225,7 @@
 
 ---
 
-## 5. 地形系统 (🟡 60%)
+## 5. 地形系统 (🟡 80%)
 
 ### 5.1 TileMap资源 - ✅ 已完成
 
@@ -260,10 +260,16 @@
 - [x] Lv.3 子弹击中钢墙 → 钢墙摧毁 + 子弹销毁（can_destroy_steel 逻辑）
 - [x] 钢墙视觉与砖墙区分（灰色 vs 棕色）
 
-### 5.6 待实现 - ❌
+### 5.6 水域 - ✅ 已完成
 
-- [ ] **钢墙** — 在 WallLayer 上放置钢墙瓦片，验证 Lv.3 摧毁逻辑
-- [ ] **水域** — 配置 WaterTileset，坦克阻挡+子弹穿越
+- [x] **WaterTileset.tres** — Physics Layer 0 配置 collision_layer=32(LAYER_BOUNDARY)
+- [x] **碰撞形状** — 每个水域瓦片添加 16×16 RectangleShape2D
+- [x] **WaterLayer 绘制** — 在 StandardBattleField.tscn 中绘制水域布局
+- [x] **坦克阻挡** — 坦克 collision_mask 包含 LAYER_BOUNDARY → 无法穿越水域
+- [x] **子弹穿越** — 子弹 collision_mask 不含 LAYER_BOUNDARY → 可飞越水域
+
+### 5.7 待实现 - ❌
+
 - [ ] **草地** — P2 延期
 - [ ] **冰面** — P3 延期
 

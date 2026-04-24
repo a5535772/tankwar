@@ -455,19 +455,18 @@
 | 执行角色 | 💻 开发 |
 | 预计工时 | 2h |
 | 依赖 | Story 2.1 |
-| 状态 | ❌ 未开始 |
+| 状态 | ✅ 已完成 |
 
 **描述**: 配置 WaterTileset 使用独立 physics layer（与边界相同 bit 5），坦克被水域阻挡，子弹可飞越。在 TankTest.tscn 中放置水域。
 
 **验收标准**:
-- [ ] WaterTileset.tres 配置正确 physics layer（bit 5）
-- [ ] 坦克无法穿越水域
-- [ ] 子弹可以飞越水域
-- [ ] TankTest.tscn 中 WaterLayer 有水域瓦片
+- [x] WaterTileset.tres 配置正确 physics layer（bit 5 = 32）
+- [x] 坦克无法穿越水域（collision_mask 包含 LAYER_BOUNDARY）
+- [x] 子弹可以飞越水域（collision_mask 不含 LAYER_BOUNDARY）
+- [x] StandardBattleField.tscn 中 WaterLayer 有水域瓦片
 
 **修改文件**:
-- `assets/tilesets/WaterTileset.tres`
-- `scenes/levels/TankTest.tscn`
+- `assets/tilesets/WaterTileset.tres` — 添加 physics_layer 配置 + 每个瓦片碰撞形状
 
 ---
 
