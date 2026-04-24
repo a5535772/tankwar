@@ -10,10 +10,10 @@
 [node name="BattleField" parent="." instance=ExtResource("battlefield")]
 
 [node name="Player1Tank" parent="." instance=ExtResource("1_player1")]
-position = Vector2(650, 480)
+position = Vector2(400, 488)
 
 [node name="Player2Tank" parent="." instance=ExtResource("2_player2")]
-position = Vector2(300, 480)
+position = Vector2(634, 487)
 
 [node name="BasicEnemyTank" parent="." instance=ExtResource("3_enemy")]
 position = Vector2(100, 100)

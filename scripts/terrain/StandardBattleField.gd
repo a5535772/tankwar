@@ -38,8 +38,9 @@ const CollisionLayersClass = preload("res://scripts/systems/CollisionLayers.gd")
 
 func _ready() -> void:
 	_create_boundary_walls()
-	_create_brick_walls()
-	_create_steel_walls()
+# 手动在编辑器中创建
+	#_create_brick_walls()
+	#_create_steel_walls()
 
 
 ## 创建 4 个 StaticBody2D 薄墙作为战场边界
