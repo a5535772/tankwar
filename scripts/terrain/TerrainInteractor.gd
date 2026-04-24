@@ -114,7 +114,7 @@ static func handle_hit_at_position(
 	if tile_type == "":
 		var source_id: int = tilemap.get_cell_source_id(coords)
 		tile_type = _tile_type_from_source(source_id)
-		if tile_type != "":
+		#if tile_type != "":
 			#print("[TerrainInteractor] custom_data为空，通过source_id推断: coords=%s source_id=%d tile_type='%s'" % [coords, source_id, tile_type])
 
 	#print("[TerrainInteractor] 瓦片命中: coords=%s tile_type='%s' raw=%s raw_type=%s" % [coords, tile_type, raw, type_string(typeof(raw))])
@@ -168,11 +168,11 @@ static func _process_tile_hit(
 			projectile.queue_free()
 		"steel":
 			if can_destroy_steel:
-			#print("[TerrainInteractor] 销毁钢墙: coords=%s" % coords)
-			_spawn_destroy_fx(tilemap, coords, FX_COLOR_STEEL)
+				#print("[TerrainInteractor] 销毁钢墙: coords=%s" % coords)
+				_spawn_destroy_fx(tilemap, coords, FX_COLOR_STEEL)
 				tilemap.erase_cell(coords)
 				EventBus.terrain_destroyed.emit("steel", coords)
-			else:
+			#else:
 				#print("[TerrainInteractor] 钢墙未摧毁(无法破坏钢墙): coords=%s" % coords)
 			projectile.queue_free()
 		"boundary":
