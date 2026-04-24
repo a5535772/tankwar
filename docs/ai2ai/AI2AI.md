@@ -1,6 +1,75 @@
 # AI 工作记录
 
+## 2026-04-24
+
+### Bug 排查: 子弹击中砖墙后无法消除砖块 (进行中)
+
+**问题现象**: 子弹击中砖墙后，碰撞检测正常（子弹被销毁），但砖墙不被消除。
+
+**修改文件**:
+- `scripts/weapons/Bullet.gd` — 添加碰撞诊断日志
+- `scripts/terrain/TerrainInteractor.gd` — 添加完整诊断日志 + source_id 后备方案
+
+**诊断日志添加位置**:
+1. `Bullet._handle_collision()`: 打印 collider 名称/类型/碰撞点
+2. `TerrainInteractor.handle_hit_at_position()`: 首次碰撞时打印 TileSet 诊断（custom_data 层数、名称、类型、source 列表、前5个瓦片的 custom_data 值）
+3. `TerrainInteractor.handle_hit_at_position()`: 打印 probe 坐标、coords、tile_type、raw 值和类型
+4. `TerrainInteractor._process_tile_hit()`: 打印砖墙/钢墙销毁日志
+
+**修复措施（source_id 后备方案）**:
+- 新增 `_tile_type_from_source()` 方法：当 `get_custom_data("tile_type")` 返回空时，通过 `get_cell_source_id()` 推断瓦片类型
+- TerrainTileset 约定：source 0=brick, 1=steel, 2=boundary
+- 对 `handle_hit_at_position()` 和 `handle_hit()` 两个入口都添加了后备逻辑
+
+**根因推测**（待日志确认）:
+- AI2AI.md 2026-04-22 记录了相同问题：`.tres` 文件的 `custom_data` 被 Godot 编辑器重新导出时还原
+- 当前 `TerrainTileset.tres` 文件内容正确，但运行时可能丢失 custom_data
+- 后备方案确保即使 custom_data 丢失，砖墙仍可被正确销毁
+
+---
+
 ## 2026-04-22
+
+### 架构重构: 16x16 子瓦片 + CharacterBody2D 子弹 ✅
+
+**修改文件**:
+- `assets/tilesets/TerrainTileset.tres` — tile_size 32→16, collision polygon 16x16
+- `scripts/terrain/StandardBattleField.gd` — GRID 翻倍(60x34), 子瓦片放置方法
+- `scripts/terrain/TerrainInteractor.gd` — 新增 handle_hit_at_position(), VFX 8x8
+- `scripts/weapons/Bullet.gd` — Area2D→CharacterBody2D, move_and_collide()
+- `scenes/entities/weapons/bullets/BasicBullet.tscn` — Area2D→CharacterBody2D
+- `scenes/entities/weapons/bullets/FastBullet.tscn` — Area2D→CharacterBody2D
+- `scenes/entities/weapons/bullets/SteelDestroyerBullet.tscn` — Area2D→CharacterBody2D
+- `scenes/entities/enemys/BasicEnemyTank.tscn` — 移除 HurtArea 节点
+
+**根因（两个架构缺陷）**:
+1. **Area2D 碰撞不可靠**: 子弹用 Area2D + body_entered 信号检测碰撞，但物理帧与移动不同步，擦边时漏检导致穿模
+2. **32x32 瓦片过大**: 一发子弹摧毁整个 32x32 砖块，不符合经典坦克大战的"一个大砖块=2x2小砖块"设计
+
+**修复内容**:
+1. **16x16 子瓦片系统**:
+   - TerrainTileset tile_size 从 32 改为 16
+   - 每个大砖块(32x32) = 2×2=4 个子瓦片，每个可独立摧毁
+   - StandardBattleField 使用 `_big_tile_to_sub_tiles()` 自动展开坐标
+   - 战场网格从 30×17(32px) 变为 60×34(16px)，像素尺寸不变
+
+2. **CharacterBody2D 子弹**:
+   - Bullet 从 Area2D 改为 CharacterBody2D
+   - 使用 `move_and_collide()` 替代手动位移 + overlap 检测
+   - 物理引擎保证碰撞不遗漏，无穿模
+   - 通过 `KinematicCollision2D.get_collider()` 直接判断碰撞对象
+   - 使用碰撞点 `collision.get_position()` 定位瓦片，比子弹中心更精确
+
+3. **移除敌人 HurtArea**:
+   - 子弹现在是 CharacterBody2D，可直接与敌人 CharacterBody2D 碰撞
+   - 不再需要 HurtArea（Area2D 子节点）中转
+   - 导弹 Missile.gd 仍使用 Area2D + body_entered，不影响（Area2D 可检测 CharacterBody2D）
+
+**TerrainInteractor 变更**:
+- 新增 `handle_hit_at_position()`: CharacterBody2D 子弹使用，接收碰撞点坐标
+- 保留 `handle_hit()`: Area2D 导弹使用，接收方向搜索逻辑
+- 提取 `_process_tile_hit()` 统一瓦片命中处理
+- VFX 半尺寸: 16.0→8.0（适配 16x16 子瓦片）
 
 ### Bug 修复: 子弹打中砖墙不消失 ✅
 
